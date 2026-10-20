@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Palet & tipografi mengikuti gaya halaman katalog acuan: navy sebagai warna utama,
+   teks abu kebiruan, aksen biru muda, dan kuning matahari untuk sorotan. */
+@theme {
+  --color-brand: #004772;
+  --color-brand-dark: #00334f;
+  --color-ink: #6b6f81;
+  --color-sky: #c0e9ff;
+  --color-sky-soft: #eaf7ff;
+  --color-sun: #f6b81a;
+  --color-line: #e6e8ee;
+
+  --font-sans: var(--font-of-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-of-heading), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  color: var(--color-ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+@theme {
+  --animate-toast: toast 2.8s ease forwards;
+
+  @keyframes toast {
+    0% { opacity: 0; transform: translateY(1rem); }
+    10%, 85% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(1rem); }
+  }
+}
