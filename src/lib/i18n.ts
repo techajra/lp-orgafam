@@ -9,7 +9,7 @@ export function hasLocale(value: string): value is Locale {
 }
 
 /** Kurs tetap untuk menampilkan harga USD di versi Inggris (bukan kurs live). */
-export const USD_RATE = 16500;
+export const USD_RATE = 18000;
 
 /** Harga dalam mata uang yang tampil untuk bahasa itu (IDR untuk id, USD untuk en). */
 export function priceIn(idr: number, lang: Locale) {
