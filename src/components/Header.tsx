@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useSelectedLayoutSegment } from 'next/navigation';
 import { Menu, Search, ShoppingBag, User, X } from 'lucide-react';
 import Logo from '@/components/Logo';
 import { useCart } from '@/components/CartProvider';
 import { useI18n } from '@/components/LocaleProvider';
 import { LOCALES } from '@/lib/i18n';
-import { NAV_HREFS } from '@/lib/site';
+import { NAV_SLUGS, pagePath } from '@/lib/site';
 
 function CartButton({ className = '' }: { className?: string }) {
   const { count } = useCart();
@@ -22,13 +23,14 @@ function CartButton({ className = '' }: { className?: string }) {
 
 function LangSwitch({ className = '' }: { className?: string }) {
   const { lang, t } = useI18n();
+  const segment = useSelectedLayoutSegment();
   return (
     <nav aria-label={t.langLabel} className={`flex items-center gap-1 text-xs font-semibold ${className}`}>
       {LOCALES.map((l, i) => (
         <span key={l} className="flex items-center gap-1">
           {i > 0 && <span className="opacity-40">|</span>}
           <Link
-            href={`/${l}`}
+            href={pagePath(l, segment)}
             hrefLang={l}
             aria-current={l === lang ? 'true' : undefined}
             className={`rounded-sm px-1 uppercase ${l === lang ? 'underline underline-offset-4' : 'opacity-70 hover:opacity-100'}`}
@@ -43,7 +45,8 @@ function LangSwitch({ className = '' }: { className?: string }) {
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const { t } = useI18n();
+  const { lang, t } = useI18n();
+  const segment = useSelectedLayoutSegment();
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -84,16 +87,22 @@ export default function Header() {
           <button type="button" className="-ml-2 p-2 text-brand lg:hidden" onClick={() => setOpen(true)} aria-label={t.openMenu}>
             <Menu className="size-6" />
           </button>
-          <a href="#" className="mx-auto lg:mx-0">
+          <Link href={pagePath(lang)} className="mx-auto lg:mx-0" aria-label="Orgafarm">
             <Logo sub={t.logoSub} />
-          </a>
+          </Link>
           <nav className="hidden flex-1 justify-center lg:flex" aria-label="Navigasi utama">
             <ul className="flex gap-8">
               {t.nav.map((label, i) => (
                 <li key={label}>
-                  <a href={NAV_HREFS[i]} className="py-2 text-[15px] uppercase tracking-wide text-ink transition hover:text-brand">
+                  <Link
+                    href={pagePath(lang, NAV_SLUGS[i])}
+                    aria-current={segment === NAV_SLUGS[i] ? 'page' : undefined}
+                    className={`border-b-2 py-2 text-[15px] uppercase tracking-wide transition hover:text-brand ${
+                      segment === NAV_SLUGS[i] ? 'border-brand text-brand' : 'border-transparent text-ink'
+                    }`}
+                  >
                     {label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -134,13 +143,14 @@ export default function Header() {
             <ul>
               {t.nav.map((label, i) => (
                 <li key={label} className="border-b border-line">
-                  <a
-                    href={NAV_HREFS[i]}
+                  <Link
+                    href={pagePath(lang, NAV_SLUGS[i])}
                     onClick={() => setOpen(false)}
-                    className="block px-5 py-3.5 text-sm uppercase tracking-wide text-brand"
+                    aria-current={segment === NAV_SLUGS[i] ? 'page' : undefined}
+                    className={`block px-5 py-3.5 text-sm uppercase tracking-wide text-brand ${segment === NAV_SLUGS[i] ? 'bg-sky-soft font-semibold' : ''}`}
                   >
                     {label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

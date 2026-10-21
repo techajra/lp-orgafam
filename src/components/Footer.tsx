@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { Mail, MessageCircle } from 'lucide-react';
 import Logo from '@/components/Logo';
 import NewsletterForm from '@/components/NewsletterForm';
 import { DICTIONARIES, type Locale } from '@/lib/i18n';
-import { FOOTER_HREFS, SITE, waLink } from '@/lib/site';
+import { FOOTER_SLUGS, SITE, pagePath, waLink } from '@/lib/site';
 
 export default function Footer({ lang }: { lang: Locale }) {
   const t = DICTIONARIES[lang];
@@ -12,9 +13,9 @@ export default function Footer({ lang }: { lang: Locale }) {
       <div className="border-t border-line bg-sky-soft">
         <p className="mx-auto max-w-7xl px-4 py-5 text-center text-sm text-ink sm:px-6">
           {t.wholesale}{' '}
-          <a href={waLink(t.waGreeting)} className="font-medium text-brand underline underline-offset-2">
+          <Link href={pagePath(lang, 'export')} className="font-medium text-brand underline underline-offset-2">
             {t.wholesaleLink}
-          </a>
+          </Link>
         </p>
       </div>
 
@@ -34,9 +35,12 @@ export default function Footer({ lang }: { lang: Locale }) {
             <ul className="mt-4 grid grid-cols-2 gap-x-6 md:grid-cols-1">
               {t.footerLinks.map((label, i) => (
                 <li key={label}>
-                  <a href={FOOTER_HREFS[i]} className="block py-1.5 text-sm uppercase tracking-wide text-white/85 hover:text-white">
+                  <Link
+                    href={FOOTER_SLUGS[i] ? pagePath(lang, FOOTER_SLUGS[i]) : '#'}
+                    className="block py-1.5 text-sm uppercase tracking-wide text-white/85 hover:text-white"
+                  >
                     {label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

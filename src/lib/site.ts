@@ -9,11 +9,15 @@ export const SITE = {
   address: 'Alamat kebun / gudang Orgafarm (placeholder)',
 };
 
-/** Tujuan menu utama, urutannya sama dengan `nav` di kamus i18n. */
-export const NAV_HREFS = ['#katalog', '#', '#', '#', '#'];
+/** Halaman di menu utama, urutannya sama dengan `nav` di kamus i18n. */
+export const NAV_SLUGS = ['shop', 'about', 'export', 'certification', 'contact'] as const;
 
-/** Tujuan tautan footer, urutannya sama dengan `footerLinks` di kamus i18n. */
-export const FOOTER_HREFS = ['#', '#katalog', '#', '#', '#', '#'];
+/** Tujuan tautan footer (slug halaman, atau null kalau belum ada), urutannya sama dengan `footerLinks`. */
+export const FOOTER_SLUGS = ['about', 'shop', 'export', 'certification', null, 'contact'] as const;
+
+export function pagePath(lang: string, slug?: string | null) {
+  return slug ? `/${lang}/${slug}` : `/${lang}`;
+}
 
 export function waLink(text: string) {
   return `https://wa.me/${SITE.waNumber}?text=${encodeURIComponent(text)}`;

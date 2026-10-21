@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Cabin, Poppins } from 'next/font/google';
+import { CartProvider } from '@/components/CartProvider';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import { LocaleProvider } from '@/components/LocaleProvider';
 import { DICTIONARIES, LOCALES, hasLocale } from '@/lib/i18n';
 import '../globals.css';
 
@@ -18,9 +22,8 @@ export async function generateMetadata({ params }: LayoutProps<'/[lang]'>): Prom
   if (!hasLocale(lang)) return {};
   const { meta } = DICTIONARIES[lang];
   return {
-    title: meta.title,
+    title: { default: meta.title, template: '%s — Orgafarm' },
     description: meta.description,
-    alternates: { languages: { id: '/id', en: '/en' } },
   };
 }
 
@@ -30,7 +33,15 @@ export default async function RootLayout({ children, params }: LayoutProps<'/[la
 
   return (
     <html lang={lang} className={`${sans.variable} ${heading.variable}`}>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <LocaleProvider lang={lang}>
+          <CartProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer lang={lang} />
+          </CartProvider>
+        </LocaleProvider>
+      </body>
     </html>
   );
 }
