@@ -2,7 +2,7 @@ import { Sprout } from 'lucide-react';
 
 // PLACEHOLDER: logo sementara (ikon + teks). Ganti dengan file logo Orgafarm, mis.
 // <Image src="/orgafarm-logo.svg" ... />, setelah aset brand tersedia.
-export default function Logo({ light = false }: { light?: boolean }) {
+export default function Logo({ light = false, sub = 'organik' }: { light?: boolean; sub?: string }) {
   return (
     <span className="inline-flex items-center gap-2" aria-label="Orgafarm">
       <span
@@ -15,7 +15,7 @@ export default function Logo({ light = false }: { light?: boolean }) {
           orgafarm
         </span>
         <span className={`block text-[10px] font-medium uppercase tracking-[0.25em] ${light ? 'text-sky' : 'text-ink'}`}>
-          organik
+          {sub}
         </span>
       </span>
     </span>

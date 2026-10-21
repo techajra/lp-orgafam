@@ -9,18 +9,24 @@ npm install
 npm run dev   # atau dari folder ajra: launch "orgafarm" (port 3040)
 ```
 
-## Konten placeholder yang perlu diganti
+## Dua bahasa
 
-Semua ditandai komentar `PLACEHOLDER` di kode.
+Rute `/id` (Rupiah) dan `/en` (USD). Halaman `/` diarahkan otomatis oleh `src/proxy.ts`:
+ke `/id` kalau bahasa browser Indonesia, selain itu ke `/en`. Semua teks antarmuka ada di
+`src/lib/i18n.ts`; kurs USD tetap diatur lewat `USD_RATE` di file yang sama.
+
+## Data & konten yang perlu dilengkapi
+
+Konten contoh ditandai komentar `PLACEHOLDER` di kode.
 
 | Apa | Di mana |
 | --- | --- |
-| Daftar produk, harga, rating, stok, kategori | `src/lib/catalog.ts` |
+| Produk, harga jual (Rupiah), satuan, kategori, label | `src/lib/catalog.ts` |
 | Foto produk (isi field `image`, file di `public/products/`) | `src/lib/catalog.ts` |
-| Nama, tagline, promo, nomor WA, email, alamat, tautan | `src/lib/site.ts` |
+| Teks antarmuka ID/EN, promo bar, deskripsi, footer | `src/lib/i18n.ts` |
+| Nomor WA, email, alamat, tujuan tautan | `src/lib/site.ts` |
 | Logo (sementara ikon + teks) | `src/components/Logo.tsx` |
-| Banner & deskripsi koleksi | `src/app/page.tsx` |
-| Judul & deskripsi SEO | `src/app/layout.tsx` |
-| Strip info grosir di atas footer | `src/components/Footer.tsx` |
+| Latar banner koleksi | `src/app/[lang]/page.tsx` |
 
+Rating bintang hanya tampil kalau field `rating` diisi — isi dengan ulasan sungguhan saja.
 Keranjang dan newsletter masih demo di sisi browser (belum tersambung ke checkout/email).

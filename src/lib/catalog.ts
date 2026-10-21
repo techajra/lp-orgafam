@@ -1,72 +1,127 @@
-// ─── PLACEHOLDER — seluruh isi file ini contoh, ganti dengan data Orgafarm asli ───
-// Nama produk, harga, rating, stok, dan kategori di bawah hanya pengisi tata letak.
-// Untuk memakai foto asli: taruh file di public/products/ lalu isi `image`, mis.
-// image: '/products/minyak-kelapa.jpg'. Selama `image` kosong, kartu menampilkan
-// gambar placeholder bertanda "FOTO PLACEHOLDER".
+import type { Locale } from '@/lib/i18n';
 
-export type CategoryId = 'minyak' | 'biji' | 'tepung' | 'beras' | 'pemanis' | 'rempah';
+// Daftar produk Orgafarm. `price` adalah harga jual dalam Rupiah (sudah termasuk
+// markup); versi Inggris menampilkannya dalam USD memakai USD_RATE di i18n.ts.
+// Untuk memakai foto asli: taruh file di public/products/ lalu isi `image`, mis.
+// image: '/products/gula-semut.jpg'. Selama `image` kosong, kartu menampilkan
+// gambar placeholder bertanda jelas.
+
+export type CategoryId = 'gula' | 'minyak' | 'rempah' | 'kopi' | 'gaharu';
+
+type Localized = Record<Locale, string>;
 
 export type Product = {
   id: string;
-  name: string;
+  name: Localized;
+  note?: Localized;
   category: CategoryId;
-  /** Harga dalam Rupiah. Kalau ada beberapa ukuran, isi harga termurah dan set `hasVariants`. */
   price: number;
+  unit: 'kg' | 'liter';
   compareAtPrice?: number;
-  hasVariants?: boolean;
-  rating: number;
-  reviews: number;
+  /** Isi hanya dengan rating dari ulasan sungguhan; kalau kosong, bintang tidak ditampilkan. */
+  rating?: { value: number; count: number };
   inStock: boolean;
-  badge?: 'Baru' | 'Terlaris' | 'Hemat';
+  badge?: Localized;
   image?: string;
   /** Urutan "Unggulan" (semakin kecil semakin depan). */
   featured: number;
-  /** Tanggal rilis untuk urutan "Terbaru" (YYYY-MM-DD). */
-  addedAt: string;
 };
 
-export const CATEGORIES: { id: CategoryId; label: string }[] = [
-  { id: 'minyak', label: 'Minyak & Lemak' },
-  { id: 'biji', label: 'Biji-bijian' },
-  { id: 'tepung', label: 'Tepung' },
-  { id: 'beras', label: 'Beras' },
-  { id: 'pemanis', label: 'Madu & Pemanis' },
-  { id: 'rempah', label: 'Rempah & Bumbu' },
+export const CATEGORIES: { id: CategoryId; label: Localized }[] = [
+  { id: 'gula', label: { id: 'Gula Kelapa', en: 'Coconut Sugar' } },
+  { id: 'minyak', label: { id: 'Minyak Kelapa', en: 'Coconut Oil' } },
+  { id: 'rempah', label: { id: 'Rempah', en: 'Spices' } },
+  { id: 'kopi', label: { id: 'Kopi', en: 'Coffee' } },
+  { id: 'gaharu', label: { id: 'Gaharu', en: 'Agarwood' } },
 ];
+
+const ORGANIC: Localized = { id: 'Organik', en: 'Organic' };
+const EU_MARKET: Localized = { id: 'Organik · pasar Eropa', en: 'Organic · EU market' };
 
 export const PRODUCTS: Product[] = [
-  { id: 'p01', name: 'Minyak Kelapa Organik', category: 'minyak', price: 45000, hasVariants: true, rating: 4.8, reviews: 126, inStock: true, badge: 'Terlaris', featured: 1, addedAt: '2026-03-02' },
-  { id: 'p02', name: 'Biji Chia Organik', category: 'biji', price: 38000, rating: 4.7, reviews: 84, inStock: true, featured: 2, addedAt: '2026-05-10' },
-  { id: 'p03', name: 'Tepung Mocaf', category: 'tepung', price: 22000, rating: 4.5, reviews: 41, inStock: true, featured: 3, addedAt: '2026-06-21' },
-  { id: 'p04', name: 'Beras Merah Organik 2 kg', category: 'beras', price: 64000, compareAtPrice: 72000, rating: 4.9, reviews: 203, inStock: true, badge: 'Hemat', featured: 4, addedAt: '2026-01-15' },
-  { id: 'p05', name: 'Madu Hutan Murni', category: 'pemanis', price: 85000, hasVariants: true, rating: 4.8, reviews: 97, inStock: true, featured: 5, addedAt: '2026-04-04' },
-  { id: 'p06', name: 'Biji Rami (Flaxseed) Giling', category: 'biji', price: 34000, rating: 4.4, reviews: 29, inStock: false, featured: 6, addedAt: '2026-02-18' },
-  { id: 'p07', name: 'Gula Aren Bubuk', category: 'pemanis', price: 28000, rating: 4.6, reviews: 58, inStock: true, featured: 7, addedAt: '2026-08-01' },
-  { id: 'p08', name: 'Kunyit Bubuk Organik', category: 'rempah', price: 19000, rating: 4.3, reviews: 17, inStock: true, badge: 'Baru', featured: 8, addedAt: '2026-09-12' },
-  { id: 'p09', name: 'Minyak Kelapa untuk Memasak 1 L', category: 'minyak', price: 52000, rating: 4.7, reviews: 66, inStock: true, featured: 9, addedAt: '2026-07-07' },
-  { id: 'p10', name: 'Tepung Beras Merah', category: 'tepung', price: 24000, rating: 4.2, reviews: 12, inStock: true, featured: 10, addedAt: '2026-05-28' },
-  { id: 'p11', name: 'Beras Hitam Organik 1 kg', category: 'beras', price: 48000, rating: 4.8, reviews: 74, inStock: false, featured: 11, addedAt: '2026-03-30' },
-  { id: 'p12', name: 'Jahe Merah Kering', category: 'rempah', price: 26000, rating: 4.5, reviews: 23, inStock: true, badge: 'Baru', featured: 12, addedAt: '2026-10-01' },
+  {
+    id: 'gula-semut',
+    name: { id: 'Gula Kelapa Semut Organik', en: 'Organic Coconut Sugar (Granulated)' },
+    note: EU_MARKET,
+    category: 'gula',
+    price: 42900,
+    unit: 'kg',
+    inStock: true,
+    badge: ORGANIC,
+    featured: 1,
+  },
+  {
+    id: 'gula-batok',
+    name: { id: 'Gula Kelapa Batok Organik', en: 'Organic Coconut Sugar (Block)' },
+    note: EU_MARKET,
+    category: 'gula',
+    price: 33800,
+    unit: 'kg',
+    inStock: true,
+    badge: ORGANIC,
+    featured: 2,
+  },
+  {
+    id: 'vco',
+    name: { id: 'Virgin Coconut Oil (VCO)', en: 'Virgin Coconut Oil (VCO)' },
+    category: 'minyak',
+    price: 84500,
+    unit: 'liter',
+    inStock: true,
+    featured: 3,
+  },
+  {
+    id: 'minyak-kelapa',
+    name: { id: 'Minyak Kelapa', en: 'Coconut Oil' },
+    category: 'minyak',
+    price: 45500,
+    unit: 'liter',
+    inStock: true,
+    featured: 4,
+  },
+  {
+    id: 'kopi-gayo',
+    name: { id: 'Kopi Gayo Aceh', en: 'Gayo Aceh Coffee' },
+    category: 'kopi',
+    price: 26000,
+    unit: 'kg',
+    inStock: true,
+    featured: 5,
+  },
+  {
+    id: 'vanili',
+    name: { id: 'Vanili', en: 'Vanilla' },
+    category: 'rempah',
+    price: 1950000,
+    unit: 'kg',
+    inStock: true,
+    featured: 6,
+  },
+  {
+    id: 'gaharu',
+    name: { id: 'Gaharu', en: 'Agarwood (Gaharu)' },
+    category: 'gaharu',
+    price: 6500000,
+    unit: 'kg',
+    inStock: true,
+    featured: 7,
+  },
 ];
 
-export const PRICE_RANGES = [
-  { id: 'lt25', label: 'Di bawah Rp25.000', min: 0, max: 24999 },
-  { id: '25-50', label: 'Rp25.000 – Rp50.000', min: 25000, max: 50000 },
-  { id: 'gt50', label: 'Di atas Rp50.000', min: 50001, max: Infinity },
-] as const;
+/** Rentang filter harga per bahasa, dalam mata uang yang tampil (IDR / USD). */
+export const PRICE_RANGES: Record<Locale, { id: string; label: string; min: number; max: number }[]> = {
+  id: [
+    { id: 'low', label: 'Di bawah Rp50.000', min: 0, max: 49999 },
+    { id: 'mid', label: 'Rp50.000 – Rp1.000.000', min: 50000, max: 1000000 },
+    { id: 'high', label: 'Di atas Rp1.000.000', min: 1000001, max: Infinity },
+  ],
+  en: [
+    { id: 'low', label: 'Under $3', min: 0, max: 2.99 },
+    { id: 'mid', label: '$3 – $60', min: 3, max: 60 },
+    { id: 'high', label: 'Over $60', min: 60.01, max: Infinity },
+  ],
+};
 
-export type SortId = 'featured' | 'best' | 'price-asc' | 'price-desc' | 'az' | 'za' | 'newest';
+export type SortId = 'featured' | 'price-asc' | 'price-desc' | 'az' | 'za';
 
-export const SORT_OPTIONS: { id: SortId; label: string }[] = [
-  { id: 'featured', label: 'Unggulan' },
-  { id: 'best', label: 'Terlaris' },
-  { id: 'price-asc', label: 'Harga: rendah ke tinggi' },
-  { id: 'price-desc', label: 'Harga: tinggi ke rendah' },
-  { id: 'az', label: 'Nama: A–Z' },
-  { id: 'za', label: 'Nama: Z–A' },
-  { id: 'newest', label: 'Terbaru' },
-];
-
-export function formatRupiah(value: number) {
-  return 'Rp' + value.toLocaleString('id-ID');
-}
+export const SORT_IDS: SortId[] = ['featured', 'price-asc', 'price-desc', 'az', 'za'];

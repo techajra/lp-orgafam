@@ -1,10 +1,14 @@
+import { notFound } from 'next/navigation';
 import { ChevronRight, Leaf, Sprout, Wheat } from 'lucide-react';
 import Catalog from '@/components/Catalog';
 import { CartProvider } from '@/components/CartProvider';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import { LocaleProvider } from '@/components/LocaleProvider';
+import { DICTIONARIES, hasLocale, type Locale } from '@/lib/i18n';
 
-function CollectionBanner() {
+function CollectionBanner({ lang }: { lang: Locale }) {
+  const t = DICTIONARIES[lang];
   return (
     <section className="relative overflow-hidden bg-sky-soft">
       {/* PLACEHOLDER: ganti latar dekoratif ini dengan foto banner koleksi (mis. kebun/hasil panen). */}
@@ -15,33 +19,35 @@ function CollectionBanner() {
       </div>
       <div className="relative mx-auto max-w-7xl px-4 py-10 text-center sm:px-6 sm:py-14">
         <nav aria-label="Breadcrumb" className="mb-4 flex items-center justify-center gap-1.5 text-sm font-medium text-ink">
-          <a href="#" className="hover:text-brand">
-            Beranda
+          <a href={`/${lang}`} className="hover:text-brand">
+            {t.home}
           </a>
           <ChevronRight className="size-3.5" aria-hidden />
           <span className="text-brand" aria-current="page">
-            Semua Produk
+            {t.collectionTitle}
           </span>
         </nav>
-        <h1 className="font-heading text-3xl font-medium text-brand sm:text-4xl">Semua Produk</h1>
-        {/* PLACEHOLDER: deskripsi koleksi */}
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed sm:text-base">
-          Deskripsi koleksi placeholder — ceritakan singkat bahwa semua produk ditanam dan diolah secara organik.
-        </p>
+        <h1 className="font-heading text-3xl font-medium text-brand sm:text-4xl">{t.collectionTitle}</h1>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed sm:text-base">{t.collectionDesc}</p>
       </div>
     </section>
   );
 }
 
-export default function CatalogPage() {
+export default async function CatalogPage({ params }: PageProps<'/[lang]'>) {
+  const { lang } = await params;
+  if (!hasLocale(lang)) notFound();
+
   return (
-    <CartProvider>
-      <Header />
-      <main>
-        <CollectionBanner />
-        <Catalog />
-      </main>
-      <Footer />
-    </CartProvider>
+    <LocaleProvider lang={lang}>
+      <CartProvider>
+        <Header />
+        <main>
+          <CollectionBanner lang={lang} />
+          <Catalog />
+        </main>
+        <Footer lang={lang} />
+      </CartProvider>
+    </LocaleProvider>
   );
 }
